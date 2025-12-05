@@ -127,7 +127,7 @@
                 <ul class="grid grid-cols-2 gap-4 text-center">
                     <li class="bg-[#f2f2f2] p-3 rounded-xl border border-[#e0d9c5] text-[#8d6e63] font-medium">公共空間使用 (含冰箱)</li>
                     <li class="bg-[#f2f2f2] p-3 rounded-xl border border-[#e0d9c5] text-[#8d6e63] font-medium">飲料、水果、餅乾、糖果、泡麵等</li>
-                    <li class="bg-[#f2f2f2] p-3 rounded-xl border border-[#e0d9c5] text-[#8d6e63] font-medium col-span-2">一樓停車空間，或路旁白線內區域</li>
+                    <li class="bg-[#f2f2f2] p-3 rounded-xl border border-[#e0d9c5] text-[#8d6e63] font-medium col-span-2">一樓停車空間，步行 1 分鐘處亦有免費停車場</li>
                 </ul>
             </section>
 
@@ -216,87 +216,5 @@
                     <div class="flex flex-col items-center">
                         <!-- QR Code Placeholder 2 (替換為圖片) -->
                         <a href="https://line.me/R/ti/p/@yourlineid" target="_blank" class="qr-placeholder transition-transform hover:scale-105">
-                            <a href="https://line.me/R/ti/p/@yourlineid" target="_blank" class="qr-placeholder transition-transform hover:scale-105">
-                           <a href="https://lin.ee/VW709ga" target="_blank"><img src="https://placehold.co/100x100/6D4C41/ffffff?text=LINE+QR"alt="循跡文旅官方 LINE QR Code (點擊連線)" /></a>
+                            <img src="https://placehold.co/100x100/6D4C41/ffffff?text=LINE+QR" alt="循跡文旅官方 LINE QR Code" onerror="this.onerror=null;this.src='https://placehold.co/100x100/6D4C41/ffffff?text=LINE+QR';" />
                         </a>
-                        <p class="text-sm text-[#8d6e63] mt-2">循跡官方 LINE</p>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-        
-    </div>
-
-    <script>
-        // JavaScript 函數：將文字複製到剪貼簿
-        function copyToClipboard(text) {
-            // 使用 document.execCommand('copy') 來確保在 iFrame 環境下也能運作
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed'; // 避免捲軸跳動
-            document.body.appendChild(textarea);
-            textarea.select();
-            
-            try {
-                const successful = document.execCommand('copy');
-                return successful;
-            } catch (err) {
-                console.error('無法複製到剪貼簿', err);
-                return false;
-            } finally {
-                document.body.removeChild(textarea);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const copyButton = document.getElementById('copyButton');
-            const wifiPasswordSpan = document.getElementById('wifiPassword');
-            const copyMessage = document.getElementById('copyMessage');
-
-            if (copyButton && wifiPasswordSpan) {
-                const password = wifiPasswordSpan.textContent;
-
-                copyButton.addEventListener('click', () => {
-                    const isCopied = copyToClipboard(password);
-                    
-                    if (isCopied) {
-                        // 顯示成功訊息
-                        copyMessage.textContent = '密碼已成功複製！';
-                        copyMessage.classList.remove('opacity-0');
-                        copyMessage.classList.add('opacity-100');
-
-                        // 變更按鈕文字為「已複製」
-                        copyButton.textContent = '已複製';
-                        copyButton.disabled = true;
-
-                        // 幾秒後恢復
-                        setTimeout(() => {
-                            copyMessage.classList.remove('opacity-100');
-                            copyMessage.classList.add('opacity-0');
-                            copyButton.textContent = '複製密碼';
-                            copyButton.disabled = false;
-                        }, 2000);
-                    } else {
-                        // 顯示失敗訊息 (通常不會發生，除非瀏覽器限制)
-                        copyMessage.textContent = '複製失敗，請手動複製。';
-                        copyMessage.classList.remove('opacity-0');
-                        copyMessage.classList.add('opacity-100');
-                        copyMessage.classList.remove('text-green-700');
-                        copyMessage.classList.add('text-red-700');
-                        
-                        setTimeout(() => {
-                            copyMessage.classList.remove('opacity-100');
-                            copyMessage.classList.add('opacity-0');
-                            copyMessage.classList.remove('text-red-700');
-                            copyMessage.classList.add('text-green-700'); // 恢復顏色
-                        }, 3000);
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-
-</html>
-
