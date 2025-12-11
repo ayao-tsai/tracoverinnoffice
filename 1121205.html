@@ -3,35 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>循跡文旅 住宿叮嚀 - 淺奶油色調</title>
+    <title>循跡文旅 住宿叮嚀</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 確保中文字體顯示良好 -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
     <style>
         /* 採用淺奶油色與咖啡棕色，營造溫暖、復古的文青咖啡廳感 */
+        :root {
+            --bg-cream: #f7f3e8;
+            --card-white: #ffffff;
+            --border-tan: #e0d9c5;
+            --text-brown: #4e342e;
+            --title-coffee: #6d4c41;
+            --accent-orange: #d8896a;
+            --highlight-yellow: #fff8e1;
+            /* 新增品牌色 */
+            --fb-blue: #1877F2;
+            --line-green: #06c755;
+        }
+
         body {
             font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft YaHei', sans-serif;
-            background-color: #f7f3e8; /* 淺奶油色背景 */
+            background-color: var(--bg-cream);
+            color: var(--text-brown);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
 
         .cafe-card {
-            background-color: #ffffff; /* 白色卡片背景 */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* 柔和的卡片陰影 */
+            background-color: var(--card-white);
+            box-shadow: 0 10px 30px rgba(109, 76, 65, 0.08); /* 帶有淡淡咖啡色的陰影 */
             border-radius: 20px;
-            border: 1px solid #e0d9c5; /* 淺棕色邊框，增加質感 */
+            border: 1px solid var(--border-tan);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 頂部裝飾條 */
+        .cafe-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--border-tan),
+                var(--border-tan) 10px,
+                var(--bg-cream) 10px,
+                var(--bg-cream) 20px
+            );
         }
 
         .section-title {
-            color: #6d4c41; /* 咖啡棕色標題 */
-            border-left: 5px solid #a1887f; /* 左側線條裝飾：柔和的暖棕色 */
+            color: var(--title-coffee);
+            border-left: 5px solid #a1887f;
             padding-left: 0.75rem;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+            letter-spacing: 0.05em;
         }
 
         .rule-item {
-            color: #4e342e; /* 深棕色文字 */
+            color: var(--text-brown);
             line-height: 1.8;
             padding-left: 1.5rem;
             position: relative;
@@ -39,182 +75,324 @@
 
         .rule-item::before {
             content: '•';
-            color: #d8896a; /* 暖橘色圓點，模擬手寫的重點標記 */
-            font-size: 1.25rem;
+            color: var(--accent-orange);
+            font-size: 1.5rem;
             position: absolute;
             left: 0;
-            top: 0;
+            top: -0.2rem;
+            line-height: 1;
         }
 
         .highlight-box {
-            background-color: #fff8e1; /* 淺鵝黃色提醒框 */
-            border: 1px dashed #d8896a; /* 虛線邊框 */
+            background-color: var(--highlight-yellow);
+            border: 1px dashed var(--accent-orange);
         }
         
-        /* 用於 Wi-Fi 區塊的暖橘色破折號，取代圓點 */
         .accent-dash {
-            color: #d8896a; 
+            color: var(--accent-orange);
             font-size: 1.2rem;
             line-height: 1;
             margin-right: 8px;
+            font-weight: bold;
         }
         
-        /* QR Code Placeholder 樣式調整，移除文字，改用圖片 */
-        .qr-placeholder img {
-            display: block;
-            width: 100px;
-            height: 100px;
-            border-radius: 8px;
-            object-fit: contain;
-            /* 讓圖片邊框與卡片風格一致 */
-            border: 1px solid #e0d9c5; 
+        .qr-frame {
+            padding: 8px;
+            background: #fff;
+            border: 2px solid var(--border-tan); /* 加粗邊框以便 hover 變色更明顯 */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
         }
 
-        /* 複製按鈕基礎樣式 */
+        .qr-frame:hover {
+            transform: translateY(-5px) rotate(2deg);
+        }
+
+        .qr-placeholder img {
+            display: block;
+            width: 120px; /* 稍微加大 QR code 區域 */
+            height: 120px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* 複製按鈕樣式 */
         .copy-button {
             transition: all 0.2s;
             cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .copy-button:hover {
-            opacity: 0.8;
+        .copy-button:active {
+            transform: scale(0.95);
         }
 
-        /* 響應式調整 */
+        /* 按鈕基礎樣式優化 */
+        .btn-primary {
+            background-color: var(--accent-orange);
+            color: white;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .btn-primary:hover {
+            background-color: #c67657;
+        }
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
         @media (max-width: 768px) {
             .section-title {
                 font-size: 1.25rem;
             }
+            .cafe-card {
+                border-radius: 0; /* 手機版貼邊 */
+                border-left: none;
+                border-right: none;
+                box-shadow: none;
+            }
         }
     </style>
 </head>
-<body class="p-4 md:p-8 lg:p-12">
+<body class="w-full md:py-8">
 
-    <div class="cafe-card max-w-4xl mx-auto p-6 md:p-10 lg:p-16">
+    <div class="cafe-card w-full max-w-3xl mx-auto p-6 md:p-12">
         
-        <!-- 標題區域 -->
-        <header class="text-center mb-10">
-            <p class="text-xs text-[#a1887f] tracking-widest mb-1">TRACöVER INN</p>
-            <h1 class="text-4xl md:text-5xl font-extrabold text-[#6d4c41] leading-tight">循跡文旅</h1>
-            <h2 class="text-2xl font-light text-[#8d6e63] mt-2 border-b border-[#e0d9c5] pb-4 mx-auto max-w-md">住宿提醒</h2>
+        <header class="text-center mb-10 pt-4">
+            <p class="text-xs text-[#a1887f] tracking-[0.2em] uppercase mb-2 font-bold">TRACöVER INN</p>
+            <h1 class="text-4xl md:text-5xl font-bold text-[#6d4c41] leading-tight mb-2 tracking-wide">循跡文旅</h1>
+            <div class="h-px w-24 bg-[#e0d9c5] mx-auto my-3"></div>
+            <h2 class="text-xl font-normal text-[#8d6e63]">住宿提醒 & 貼心指南</h2>
         </header>
 
-        <!-- 區塊分隔線 -->
-        <div class="space-y-10">
+        <div class="space-y-12">
 
-            <!-- 住宿時間與規定 -->
+            <!-- Section 1: 住宿原則 -->
             <section>
-                <h3 class="section-title mb-4">住宿原則・Quiet Hours</h3>
+                <h3 class="section-title mb-5">住宿原則・Quiet Hours</h3>
                 
-                <div class="highlight-box p-4 mb-6 rounded-lg text-[#6d4c41] font-semibold text-lg">
-                    <p class="mb-1"><span class="text-[#d8896a]">◍ 入住時間：</span> 當日 15:00 後</p>
-                    <p><span class="text-[#d8896a]">◍ 退房時間：</span> 隔日 11:00 前</p>
+                <div class="highlight-box p-5 mb-6 rounded-xl text-[#6d4c41] font-medium text-lg shadow-sm">
+                    <div class="flex flex-col sm:flex-row justify-center gap-2 sm:gap-8">
+                        <p><span class="text-[#d8896a] font-bold">◍ 入住時間：</span> 15:00 後</p>
+                        <p><span class="text-[#d8896a] font-bold">◍ 退房時間：</span> 11:00 前</p>
+                    </div>
                 </div>
                 
-                <ul class="space-y-3">
+                <ul class="space-y-3 pl-1">
                     <li class="rule-item">循跡文旅全面禁菸，吸菸請至一樓戶外指定空間。</li>
                     <li class="rule-item">為維護住宿品質，謝絕寵物入住，造成不便敬請見諒。</li>
-                    <li class="rule-item">為尊重其他旅客權益，晚上 10:00 後公共空間請降低音量，輕聲細語。</li>
+                    <li class="rule-item">為尊重其他旅客權益，晚上 <span class="font-bold text-[#d8896a]">10:00 後</span>公共空間請降低音量，輕聲細語。</li>
                     <li class="rule-item">嚴禁任何不法行為，包含吸毒、販毒、賭博及燃放鞭炮等。</li>
                 </ul>
             </section>
             
-            <!-- 貼心服務與免費項目 -->
+            <!-- Section 2: 貼心服務 -->
             <section>
-                <h3 class="section-title mb-4">貼心服務・Complimentary</h3>
-                <p class="text-[#4e342e] mb-4">民宿內提供以下項目，讓您有個愉快的旅程，全部免費！也歡迎於退房前拿一些作為旅行小補給唷～</p>
+                <h3 class="section-title mb-5">貼心服務・Complimentary</h3>
+                <p class="text-[#5d4037] mb-4 text-sm md:text-base leading-relaxed">
+                    民宿內提供以下項目，讓您有個愉快的旅程，全部免費！也歡迎於退房前拿一些作為旅行小補給唷～
+                </p>
                 
-                <ul class="grid grid-cols-2 gap-4 text-center">
-                    <li class="bg-[#f2f2f2] p-3 rounded-xl border border-[#e0d9c5] text-[#8d6e63] font-medium">公共空間使用 (含冰箱)</li>
-                    <li class="bg-[#f2f2f2] p-3 rounded-xl border border-[#e0d9c5] text-[#8d6e63] font-medium">飲料、水果、餅乾、糖果、泡麵等</li>
-                    <li class="bg-[#f2f2f2] p-3 rounded-xl border border-[#e0d9c5] text-[#8d6e63] font-medium col-span-2">一樓停車空間，步行 1 分鐘處亦有免費停車場</li>
-                </ul>
-            </section>
-
-            <!-- Wi-Fi 資訊 (新增複製功能) -->
-            <section>
-                <h3 class="section-title mb-4">Wi-Fi 密碼・Passcode</h3>
-                <p class="text-[#a1887f] mb-3 text-sm">（密碼即為聯絡電話，請安心使用喔～）</p>
-                <div class="space-y-3 p-4 bg-[#fff8e1] rounded-xl border border-[#f0e0c0]">
-                    <div class="flex items-center text-lg text-[#4e342e] justify-center">
-                        <span class="accent-dash">—</span>
-                        <span class="font-semibold mr-3">網路名稱 (SSID):</span> TRACöVER INN
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-center">
+                    <div class="bg-[#f9f7f2] p-4 rounded-xl border border-[#ece7dc] text-[#795548] font-medium flex items-center justify-center gap-2">
+                        <span>🧊</span> 公共空間使用 (含冰箱)
                     </div>
-                    
-                    <div class="flex items-center text-lg text-[#4e342e] justify-center flex-wrap">
-                        <div class="flex items-center">
-                            <span class="accent-dash">—</span>
-                            <span class="font-semibold mr-3">密碼 (Password):</span> 
-                            <span id="wifiPassword" class="font-mono text-[#d8896a] tracking-wider">0932852037</span>
-                        </div>
-                        
-                        <!-- 複製按鈕 -->
-                        <button id="copyButton" class="copy-button ml-3 px-3 py-1 text-sm rounded-full bg-[#a1887f] text-white shadow-md hover:bg-[#8d6e63] active:scale-95 whitespace-nowrap mt-2 md:mt-0">
-                            複製密碼
-                        </button>
+                    <div class="bg-[#f9f7f2] p-4 rounded-xl border border-[#ece7dc] text-[#795548] font-medium flex items-center justify-center gap-2">
+                        <span>🍪</span> 飲料、水果、餅乾、泡麵
                     </div>
-                    <!-- 複製狀態訊息 -->
-                    <p id="copyMessage" class="text-center text-xs text-green-700 opacity-0 transition-opacity duration-300">已成功複製！</p>
+                    <div class="bg-[#f9f7f2] p-4 rounded-xl border border-[#ece7dc] text-[#795548] font-medium sm:col-span-2 flex items-center justify-center gap-2">
+                        <span>🚗</span> 一樓停車空間 (步行1分鐘亦有免費停車場)
+                    </div>
                 </div>
             </section>
 
-            <!-- 額外需求與費用 -->
+            <!-- Section 3: Wi-Fi -->
             <section>
-                <h3 class="section-title mb-4">額外加購・Additional Fees</h3>
-                <p class="text-[#4e342e] mb-4">若有以下需求，請於訂房前提前告知以利準備：</p>
+                <h3 class="section-title mb-5">Wi-Fi 密碼・Passcode</h3>
+                <div class="relative overflow-hidden p-6 bg-[#fff8e1] rounded-2xl border border-[#f0e0c0]">
+                    <!-- 背景裝飾 (改用 SVG 修復破圖問題) -->
+                    <div class="absolute right-0 top-0 -mt-10 -mr-10 opacity-10 pointer-events-none">
+                         <svg width="200" height="200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 19.5C12 19.5 12 19.5 12 19.5M12 19.5C12.2761 19.5 12.5 19.2761 12.5 19C12.5 18.7239 12.2761 18.5 12 18.5C11.7239 18.5 11.5 18.7239 11.5 19C11.5 19.2761 11.7239 19.5 12 19.5ZM17.6569 13.8431C16.1566 12.3429 14.1216 11.5 12 11.5C9.87843 11.5 7.84344 12.3429 6.34315 13.8431M20.4853 11.0147C18.2346 8.76403 15.1819 7.5 12 7.5C8.81812 7.5 5.76536 8.76403 3.51472 11.0147M23.3137 8.18629C20.304 5.17662 16.2234 3.5 12 3.5C7.77656 3.5 3.696 5.17662 0.686292 8.18629" stroke="#d8896a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    
+                    <p class="text-[#a1887f] mb-4 text-sm relative z-10">（密碼即為聯絡電話，請安心使用喔～）</p>
+                    
+                    <div class="flex flex-col space-y-3 relative z-10">
+                        <div class="flex items-center text-lg text-[#4e342e]">
+                            <span class="accent-dash">—</span>
+                            <span class="font-bold mr-3 text-[#6d4c41]">網路名稱 (SSID):</span> 
+                            <span>TRACöVER INN</span>
+                        </div>
+                        
+                        <div class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center text-lg text-[#4e342e]">
+                                <span class="accent-dash">—</span>
+                                <span class="font-bold mr-3 text-[#6d4c41]">密碼 (Password):</span> 
+                                <span id="wifiPassword" class="font-mono text-[#d8896a] font-bold tracking-widest text-xl">0932852037</span>
+                            </div>
+                            
+                            <button id="copyButton" class="copy-button ml-0 md:ml-2 px-4 py-1.5 text-sm rounded-full bg-[#a1887f] text-white shadow hover:bg-[#8d6e63] flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                </svg>
+                                複製密碼
+                            </button>
+                        </div>
+                        <div id="copyMessage" class="h-6 text-sm text-green-700 font-medium transition-all duration-300 opacity-0 transform translate-y-2">
+                            ✅ 已成功複製！
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: 額外加購 -->
+            <section>
+                <h3 class="section-title mb-5">額外加購・Additional Fees</h3>
+                <p class="text-[#5d4037] mb-4 text-sm">若有以下需求，請於訂房前提前告知以利準備：</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- 需求列表 -->
-                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <h4 class="font-semibold text-[#6d4c41] mb-2">預約需求 (需提前告知)</h4>
-                        <ul class="text-sm text-[#8d6e63] space-y-1 list-disc list-inside">
-                            <li>雙床併床服務</li>
-                            <li>小孩澡盆</li>
-                            <li>浴室板凳</li>
+                    <!-- 左卡片 -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm relative overflow-hidden group hover:border-[#e0d9c5] transition-colors">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-[#f7f3e8] rounded-bl-full -mr-8 -mt-8 z-0"></div>
+                        <h4 class="font-bold text-[#6d4c41] mb-3 relative z-10 flex items-center gap-2">
+                            <span class="text-xl">🛎️</span> 預約需求 <span class="text-xs font-normal text-[#a1887f] border border-[#a1887f] rounded px-1">需提前</span>
+                        </h4>
+                        <ul class="text-[#6d4c41] space-y-2 list-none text-sm relative z-10">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-[#d8896a] rounded-full mr-2"></span>雙床併床服務</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-[#d8896a] rounded-full mr-2"></span>小孩澡盆</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-[#d8896a] rounded-full mr-2"></span>浴室板凳</li>
                         </ul>
                     </div>
                     
-                    <!-- 費用列表 -->
-                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <h4 class="font-semibold text-[#6d4c41] mb-2">加價費用 (NTD)</h4>
-                        <ul class="text-sm text-[#8d6e63] space-y-1 list-disc list-inside">
-                            <li>加人：300 元/人</li>
-                            <li>加床：500 元/床</li>
-                            <li>加棉被：100 元/條</li>
+                    <!-- 右卡片 -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm relative overflow-hidden hover:border-[#e0d9c5] transition-colors">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-[#f7f3e8] rounded-bl-full -mr-8 -mt-8 z-0"></div>
+                        <h4 class="font-bold text-[#6d4c41] mb-3 relative z-10 flex items-center gap-2">
+                            <span class="text-xl">💰</span> 加價費用 <span class="text-xs font-normal text-[#a1887f]">NTD</span>
+                        </h4>
+                        <ul class="text-[#6d4c41] space-y-2 list-none text-sm relative z-10">
+                            <li class="flex justify-between border-b border-dashed border-gray-100 pb-1">
+                                <span>加人</span> <span class="font-bold text-[#d8896a]">300 元/人</span>
+                            </li>
+                            <li class="flex justify-between border-b border-dashed border-gray-100 pb-1">
+                                <span>加床</span> <span class="font-bold text-[#d8896a]">500 元/床</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>加棉被</span> <span class="font-bold text-[#d8896a]">100 元/條</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </section>
             
-            <!-- 地點導航與地圖連結 (新增區塊) -->
+            <!-- Section 5: 地點導航 -->
             <section>
-                <h3 class="section-title mb-4">地點導航・Location</h3>
-                <p class="text-[#4e342e] mb-4">點擊下方按鈕，可直接開啟 Google 地圖導航至循跡文旅。建議在出發前儲存地點。</p>
-
-                <div class="text-center p-4 bg-[#fff8e1] rounded-xl border border-[#f0e0c0]">
-                    <p class="text-sm text-[#a1887f] mb-3">請將下方連結替換為您的民宿 Google Maps 導航連結</p>
-                    <!-- 導航按鈕，使用暖橘色突出顯示 -->
-                    <a href="https://maps.app.goo.gl/YourInnLocationLink" target="_blank" class="inline-block px-6 py-3 rounded-full bg-[#d8896a] text-white font-bold shadow-lg hover:bg-[#c67657] transition duration-300 active:scale-95">
-                        <span style="font-size: 1.2rem; margin-right: 8px;">&#128205;</span> 開啟 Google 地圖導航
+                <h3 class="section-title mb-5">地點導航・Location</h3>
+                <div class="text-center p-8 bg-[#fff8e1] rounded-2xl border border-[#f0e0c0] flex flex-col items-center">
+                    <p class="text-[#5d4037] mb-6 max-w-md mx-auto">
+                        建議您在出發前先點擊下方按鈕，開啟 Google 地圖導航並儲存地點，確保旅途順利。
+                    </p>
+                    <a href="https://maps.app.goo.gl/2hACwknx3dkWGyna7?g_st=ipc" target="_blank" class="btn-primary inline-flex items-center justify-center px-8 py-4 rounded-full font-bold shadow-lg shadow-[#d8896a]/30 transition-all duration-300 transform hover:-translate-y-1">
+                        <span class="text-2xl mr-3 animate-bounce">📍</span> 
+                        <span class="text-lg">開啟 Google 地圖導航</span>
                     </a>
                 </div>
             </section>
 
-
-            <!-- 聯絡方式 (更新為圖片佔位符和連結) -->
-            <section class="text-center pt-6 border-t border-dashed border-[#e0d9c5]">
-                <h3 class="text-xl font-semibold text-[#6d4c41] mb-4">聯絡與追蹤我們</h3>
-                <p class="text-[#a1887f] mb-6 text-sm">（點擊圖片可直接開啟連結）</p>
-                <div class="flex justify-center space-x-8">
-                    <div class="flex flex-col items-center">
-                        <!-- QR Code Placeholder 1 (替換為圖片) -->
-                        <a href="https://www.facebook.com/tracoverinn" target="_blank" class="qr-placeholder transition-transform hover:scale-105">
-                            <img src="https://placehold.co/100x100/A1887F/ffffff?text=FB+QR" alt="循跡文旅臉書粉絲專頁 QR Code" onerror="this.onerror=null;this.src='https://placehold.co/100x100/A1887F/ffffff?text=FB+QR';" />
+            <!-- Footer: 聯絡我們 (已更新品牌色與移除 QR 字樣) -->
+            <section class="text-center pt-10 border-t-2 border-dashed border-[#e0d9c5] mt-8">
+                <h3 class="text-xl font-bold text-[#6d4c41] mb-6">聯絡與追蹤我們</h3>
+                
+                <div class="flex justify-center gap-8 md:gap-16">
+                    <!-- FB (使用 FB 藍色) -->
+                    <div class="flex flex-col items-center group cursor-pointer">
+                        <a href="https://www.facebook.com/share/1AZPxGJtd7/?mibextid=wwXIfr" target="_blank" class="qr-frame group-hover:border-[#1877F2]">
+                            <div class="qr-placeholder">
+                                <!-- 替換為藍色背景，無 QR 字樣的佔位圖 -->
+                                <img src="https://placehold.co/150x150/1877F2/ffffff?text=FB&font=roboto" alt="循跡文旅臉書粉絲專頁" onerror="this.src='https://placehold.co/150x150/eee/999?text=Image+Error'">
+                            </div>
                         </a>
-                        <p class="text-sm text-[#8d6e63] mt-2">循跡臉書粉專</p>
+                        <p class="text-sm font-medium text-[#8d6e63] mt-3 group-hover:text-[#1877F2] transition-colors">循跡臉書粉專</p>
                     </div>
-                    <div class="flex flex-col items-center">
-                        <!-- QR Code Placeholder 2 (替換為圖片) -->
-                        <a href="https://line.me/R/ti/p/@yourlineid" target="_blank" class="qr-placeholder transition-transform hover:scale-105">
-                            <img src="https://placehold.co/100x100/6D4C41/ffffff?text=LINE+QR" alt="循跡文旅官方 LINE QR Code" onerror="this.onerror=null;this.src='https://placehold.co/100x100/6D4C41/ffffff?text=LINE+QR';" />
+
+                    <!-- LINE (使用 LINE 綠色) -->
+                    <div class="flex flex-col items-center group cursor-pointer">
+                        <a href="https://lin.ee/tEn5MXD" target="_blank" class="qr-frame group-hover:border-[#06c755]">
+                            <div class="qr-placeholder">
+                                <!-- 替換為綠色背景，無 QR 字樣的佔位圖 -->
+                                <img src="https://placehold.co/150x150/06c755/ffffff?text=LINE&font=roboto" alt="循跡文旅官方 LINE" onerror="this.src='https://placehold.co/150x150/eee/999?text=Image+Error'">
+                            </div>
                         </a>
+                        <p class="text-sm font-medium text-[#8d6e63] mt-3 group-hover:text-[#06c755] transition-colors">官方 LINE</p>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-xs text-[#bcaaa4]">
+                    &copy; TRACöVER INN 循跡文旅. All Rights Reserved.
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            var passwordText = document.getElementById('wifiPassword').innerText;
+            var copyMessage = document.getElementById('copyMessage');
+            var btn = this;
+            
+            // 嘗試使用現代 API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(passwordText).then(onCopySuccess, onCopyFallback);
+            } else {
+                // 回退機制 (Legacy)
+                onCopyFallback(passwordText);
+            }
+
+            function onCopyFallback(text) {
+                var textArea = document.createElement("textarea");
+                textArea.value = text || passwordText;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                textArea.style.top = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                try {
+                    var successful = document.execCommand('copy');
+                    if(successful) {
+                        onCopySuccess();
+                    } else {
+                        console.error('Fallback: Copying text command was unsuccessful');
+                    }
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+
+            function onCopySuccess() {
+                copyMessage.classList.remove('opacity-0', 'translate-y-2');
+                copyMessage.classList.add('opacity-100', 'translate-y-0');
+                
+                var originalBg = btn.className;
+                btn.classList.remove('bg-[#a1887f]', 'hover:bg-[#8d6e63]');
+                btn.classList.add('bg-green-600', 'hover:bg-green-700');
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> 已複製';
+
+                setTimeout(function() {
+                    copyMessage.classList.add('opacity-0', 'translate-y-2');
+                    copyMessage.classList.remove('opacity-100', 'translate-y-0');
+                    
+                    btn.className = "copy-button ml-0 md:ml-2 px-4 py-1.5 text-sm rounded-full bg-[#a1887f] text-white shadow hover:bg-[#8d6e63] flex items-center gap-1";
+                    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg> 複製密碼';
+                }, 3000);
+            }
+        });
+    </script>
+
+</body>
+</html>
