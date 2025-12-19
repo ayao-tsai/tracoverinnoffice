@@ -1,53 +1,106 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>循跡文旅 住宿叮嚀</title>
+    <title>喜結良緣 - 蔡耀文 & 王晴萱</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap">
     <style>
-        /* 採用淺奶油色與咖啡棕色，營造溫暖、復古的文青咖啡廳感 */
+        /* 循跡文旅風格色票 (奶油/咖啡色調) */
         :root {
-            --bg-cream: #f7f3e8;
+            --bg-cream: #f7f3e8;           /* 溫潤奶油底 */
             --card-white: #ffffff;
-            --border-tan: #e0d9c5;
-            --text-brown: #4e342e;
-            --title-coffee: #6d4c41;
-            --accent-orange: #d8896a;
-            --highlight-yellow: #fff8e1;
-            /* 新增品牌色 */
-            --fb-blue: #1877F2;
-            --line-green: #06c755;
+            --border-tan: #e0d9c5;         /* 淺卡其邊框 */
+            --text-brown: #4e342e;         /* 深咖啡文字 */
+            --title-coffee: #6d4c41;       /* 拿鐵色標題 */
+            --accent-orange: #d8896a;      /* 溫暖橘 (按鈕) */
+            --highlight-yellow: #fff8e1;   /* 淺黃底色 */
+            --decoration-gold: #a1887f;    /* 裝飾線 (改為淺咖) */
         }
 
         body {
-            font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft YaHei', sans-serif;
+            font-family: 'Noto Sans TC', sans-serif;
             background-color: var(--bg-cream);
             color: var(--text-brown);
+            margin: 0;
+            padding: 0;
+            background-image: none;
+            overflow-x: hidden;
+        }
+
+        /* 封面全螢幕區塊 */
+        .intro-screen {
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background-color: var(--bg-cream);
+            /* 加入一點點紋理質感 */
+            background-image: radial-gradient(#e0d9c5 1px, transparent 1px);
+            background-size: 30px 30px;
         }
 
+        .intro-text {
+            font-family: 'Noto Serif TC', serif; /* 使用襯線體更有文學感 */
+            line-height: 2.2;
+            font-size: 1.05rem;
+            color: var(--title-coffee);
+            margin-bottom: 2rem;
+            opacity: 0; /* 初始隱藏，用於動畫 */
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+
+        .intro-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-orange);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 0.5s forwards;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--decoration-gold);
+            font-size: 0.9rem;
+            animation: bounce 2s infinite;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 2s forwards, bounce 2s infinite 2s;
+        }
+
+        /* 主卡片容器 */
         .cafe-card {
             background-color: var(--card-white);
-            box-shadow: 0 10px 30px rgba(109, 76, 65, 0.08); /* 帶有淡淡咖啡色的陰影 */
-            border-radius: 20px;
+            box-shadow: 0 -10px 30px rgba(109, 76, 65, 0.05); /* 陰影往上，製造層次感 */
+            border-radius: 20px 20px 0 0; /* 上方圓角 */
             border: 1px solid var(--border-tan);
+            border-bottom: none;
             position: relative;
             overflow: hidden;
+            width: 100%;
+            max-width: 48rem;
+            margin: 0 auto;
+            min-height: 100vh; /* 確保主內容至少填滿一頁 */
         }
 
-        /* 頂部裝飾條 */
+        /* 頂部裝飾條 (循跡風格斜紋) */
         .cafe-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 6px;
+            height: 8px;
             background: repeating-linear-gradient(
                 45deg,
                 var(--border-tan),
@@ -55,8 +108,10 @@
                 var(--bg-cream) 10px,
                 var(--bg-cream) 20px
             );
+            z-index: 10;
         }
 
+        /* 章節標題風格 (左側飾線) */
         .section-title {
             color: var(--title-coffee);
             border-left: 5px solid #a1887f;
@@ -64,336 +119,621 @@
             font-weight: 700;
             font-size: 1.4rem;
             letter-spacing: 0.05em;
+            margin-bottom: 1.25rem;
+            margin-top: 2rem;
         }
 
-        .rule-item {
-            color: var(--text-brown);
+        /* 內容文字樣式 */
+        p, li {
             line-height: 1.8;
-            padding-left: 1.5rem;
-            position: relative;
+            color: var(--text-brown);
         }
 
-        .rule-item::before {
-            content: '•';
-            color: var(--accent-orange);
-            font-size: 1.5rem;
-            position: absolute;
-            left: 0;
-            top: -0.2rem;
-            line-height: 1;
-        }
-
-        .highlight-box {
-            background-color: var(--highlight-yellow);
-            border: 1px dashed var(--accent-orange);
-        }
-        
-        .accent-dash {
-            color: var(--accent-orange);
-            font-size: 1.2rem;
-            line-height: 1;
-            margin-right: 8px;
-            font-weight: bold;
-        }
-        
-        .qr-frame {
-            padding: 8px;
-            background: #fff;
-            border: 2px solid var(--border-tan); /* 加粗邊框以便 hover 變色更明顯 */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-radius: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .qr-frame:hover {
-            transform: translateY(-5px) rotate(2deg);
-        }
-
-        .qr-placeholder img {
+        /* 英文輔助文字樣式 */
+        .en-text {
             display: block;
-            width: 120px; /* 稍微加大 QR code 區域 */
-            height: 120px;
-            object-fit: cover;
-            border-radius: 4px;
+            font-size: 0.85em;
+            color: #8d6e63; /* 較淺的咖啡色 */
+            font-weight: normal;
+            line-height: 1.4;
+            margin-top: 2px;
         }
 
-        /* 複製按鈕樣式 */
-        .copy-button {
-            transition: all 0.2s;
-            cursor: pointer;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .copy-button:active {
-            transform: scale(0.95);
-        }
-
-        /* 按鈕基礎樣式優化 */
+        /* 按鈕樣式 */
         .btn-primary {
+            display: inline-block;
             background-color: var(--accent-orange);
             color: white;
-            transition: background-color 0.3s, transform 0.1s;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px; /* Pill shape */
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(216, 137, 106, 0.2);
+            cursor: pointer;
+            border: none;
+            width: 100%; 
         }
         .btn-primary:hover {
             background-color: #c67657;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(216, 137, 106, 0.3);
         }
-        .btn-primary:active {
-            transform: scale(0.98);
+        
+        /* 導航列 */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--border-tan);
+            padding: 0.8rem 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            text-align: center;
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
+        .nav-bar::-webkit-scrollbar {
+            display: none;
+        }
+        .nav-bar a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            color: var(--text-brown);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .nav-bar a:hover, .nav-bar a:active {
+            background-color: var(--highlight-yellow);
+            color: var(--accent-orange);
+        }
+
+        /* 倒數計時器 */
+        .countdown-box {
+            background-color: var(--highlight-yellow);
+            border: 1px dashed var(--accent-orange);
+            border-radius: 12px;
+            padding: 0.5rem;
+            min-width: 60px;
+            text-align: center;
+        }
+        .countdown-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--title-coffee);
+            line-height: 1.2;
+        }
+        .countdown-label {
+            font-size: 0.75rem;
+            color: var(--text-brown);
+        }
+
+        /* Q&A 樣式 */
+        .qa-item {
+            background-color: #fff;
+            border: 1px solid var(--border-tan);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .qa-question {
+            background-color: #f9f7f2;
+            padding: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .qa-answer {
+            padding: 1rem;
+            display: none;
+            border-top: 1px dashed var(--border-tan);
+            color: #666;
+        }
+
+        /* Quiz 樣式 */
+        .quiz-question {
+            background-color: var(--highlight-yellow);
+            border: 1px solid #f0e0c0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .quiz-option {
+            display: block;
+            background: white;
+            border: 1px solid var(--border-tan);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--accent-orange);
+            background-color: #fffbf0;
+        }
+        .feedback-message {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        .feedback-correct { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .feedback-incorrect { background-color: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+
+        /* 圖片樣式 */
+        .responsive-img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* 婚紗相本輪播樣式 */
+        .gallery-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch; 
+            scrollbar-width: none;
+        }
+        .gallery-container::-webkit-scrollbar {
+            display: none;
+        }
+        .gallery-item {
+            scroll-snap-align: center;
+            flex: 0 0 85%;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* 旅遊資訊卡片 */
+        .travel-card {
+            background: #fff;
+            border: 1px solid var(--border-tan);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .travel-card:hover {
+            border-color: var(--accent-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(109, 76, 65, 0.1);
+        }
+
+        /* 表單輸入框 */
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-tan);
+            border-radius: 8px;
+            background-color: #f9f7f2;
+            color: var(--text-brown);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        /* 動畫 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
         }
 
         @media (max-width: 768px) {
-            .section-title {
-                font-size: 1.25rem;
-            }
-            .cafe-card {
-                border-radius: 0; /* 手機版貼邊 */
-                border-left: none;
-                border-right: none;
-                box-shadow: none;
-            }
+            .cafe-card { border-radius: 20px 20px 0 0; border-left: none; border-right: none; box-shadow: none; border-top: 1px solid var(--border-tan); }
         }
     </style>
 </head>
-<body class="w-full md:py-8">
+<body>
 
-    <div class="cafe-card w-full max-w-3xl mx-auto p-6 md:p-12">
+    <!-- 1. 滿版封面簡述 (Intro Screen) -->
+    <div id="intro" class="intro-screen">
+        <h2 class="intro-title">Ayao & Sherry</h2>
+        <div class="intro-text">
+            <p>牽手共伴十年，彷彿一瞬。</p>
+            <p>還記得第一次相約見面，</p>
+            <p>是在風雨交加的颱風夜。</p>
+            <br>
+            <p>從學生時期的青春羞澀，</p>
+            <p>到畢業後南北相隔的遠距日子，</p>
+            <p>我們一路走過，彼此相伴。</p>
+            <br>
+            <p>如今，我們一同落腳在浪漫的南國恆春。</p>
+            <p>這段旅程中，感謝親愛的家人與朋友</p>
+            <p>始終陪伴與照顧，</p>
+            <p>讓我們擁有了全宇宙最幸福的青春記憶。</p>
+            <br>
+            <p>在交往的第十週年，</p>
+            <p>我們決定攜手邁向人生的下一段旅程。</p>
+            <br>
+            <p>誠摯邀請最親愛的你們，</p>
+            <p>一同見證這份美好的時刻。</p>
+        </div>
         
-        <header class="text-center mb-10 pt-4">
-            <p class="text-xs text-[#a1887f] tracking-[0.2em] uppercase mb-2 font-bold">TRACöVER INN</p>
-            <h1 class="text-4xl md:text-5xl font-bold text-[#6d4c41] leading-tight mb-2 tracking-wide">循跡文旅</h1>
-            <div class="h-px w-24 bg-[#e0d9c5] mx-auto my-3"></div>
-            <h2 class="text-xl font-normal text-[#8d6e63]">住宿提醒 & 貼心指南</h2>
-        </header>
-
-        <div class="space-y-12">
-
-            <!-- Section 1: 住宿原則 -->
-            <section>
-                <h3 class="section-title mb-5">住宿原則・Quiet Hours</h3>
-                
-                <div class="highlight-box p-5 mb-6 rounded-xl text-[#6d4c41] font-medium text-lg shadow-sm">
-                    <div class="flex flex-col sm:flex-row justify-center gap-2 sm:gap-8">
-                        <p><span class="text-[#d8896a] font-bold">◍ 入住時間：</span> 15:00 後</p>
-                        <p><span class="text-[#d8896a] font-bold">◍ 退房時間：</span> 11:00 前</p>
-                    </div>
-                </div>
-                
-                <ul class="space-y-3 pl-1">
-                    <li class="rule-item">循跡文旅全面禁菸，吸菸請至一樓戶外指定空間。</li>
-                    <li class="rule-item">為維護住宿品質，謝絕寵物入住，造成不便敬請見諒。</li>
-                    <li class="rule-item">為尊重其他旅客權益，晚上 <span class="font-bold text-[#d8896a]">10:00 後</span>公共空間請降低音量，輕聲細語。</li>
-                    <li class="rule-item">嚴禁任何不法行為，包含吸毒、販毒、賭博及燃放鞭炮等。</li>
-                </ul>
-            </section>
-            
-            <!-- Section 2: 貼心服務 -->
-            <section>
-                <h3 class="section-title mb-5">貼心服務・Complimentary</h3>
-                <p class="text-[#5d4037] mb-4 text-sm md:text-base leading-relaxed">
-                    民宿內提供以下項目，讓您有個愉快的旅程，全部免費！也歡迎於退房前拿一些作為旅行小補給唷～
-                </p>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-center">
-                    <div class="bg-[#f9f7f2] p-4 rounded-xl border border-[#ece7dc] text-[#795548] font-medium flex items-center justify-center gap-2">
-                        <span>🧊</span> 公共空間使用 (含冰箱)
-                    </div>
-                    <div class="bg-[#f9f7f2] p-4 rounded-xl border border-[#ece7dc] text-[#795548] font-medium flex items-center justify-center gap-2">
-                        <span>🍪</span> 飲料、水果、餅乾、泡麵
-                    </div>
-                    <div class="bg-[#f9f7f2] p-4 rounded-xl border border-[#ece7dc] text-[#795548] font-medium sm:col-span-2 flex items-center justify-center gap-2">
-                        <span>🚗</span> 一樓停車空間 (或路旁白線內)
-                    </div>
-                </div>
-            </section>
-
-            <!-- Section 3: Wi-Fi -->
-            <section>
-                <h3 class="section-title mb-5">Wi-Fi 密碼・Passcode</h3>
-                <div class="relative overflow-hidden p-6 bg-[#fff8e1] rounded-2xl border border-[#f0e0c0]">
-                    <!-- 背景裝飾 (改用 SVG 修復破圖問題) -->
-                    <div class="absolute right-0 top-0 -mt-10 -mr-10 opacity-10 pointer-events-none">
-                         <svg width="200" height="200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 19.5C12 19.5 12 19.5 12 19.5M12 19.5C12.2761 19.5 12.5 19.2761 12.5 19C12.5 18.7239 12.2761 18.5 12 18.5C11.7239 18.5 11.5 18.7239 11.5 19C11.5 19.2761 11.7239 19.5 12 19.5ZM17.6569 13.8431C16.1566 12.3429 14.1216 11.5 12 11.5C9.87843 11.5 7.84344 12.3429 6.34315 13.8431M20.4853 11.0147C18.2346 8.76403 15.1819 7.5 12 7.5C8.81812 7.5 5.76536 8.76403 3.51472 11.0147M23.3137 8.18629C20.304 5.17662 16.2234 3.5 12 3.5C7.77656 3.5 3.696 5.17662 0.686292 8.18629" stroke="#d8896a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    
-                    <p class="text-[#a1887f] mb-4 text-sm relative z-10">（密碼即為聯絡電話，請安心使用喔～）</p>
-                    
-                    <div class="flex flex-col space-y-3 relative z-10">
-                        <div class="flex items-center text-lg text-[#4e342e]">
-                            <span class="accent-dash">—</span>
-                            <span class="font-bold mr-3 text-[#6d4c41]">網路名稱 (SSID):</span> 
-                            <span>TRACöVER INN</span>
-                        </div>
-                        
-                        <div class="flex flex-wrap items-center gap-3">
-                            <div class="flex items-center text-lg text-[#4e342e]">
-                                <span class="accent-dash">—</span>
-                                <span class="font-bold mr-3 text-[#6d4c41]">密碼 (Password):</span> 
-                                <span id="wifiPassword" class="font-mono text-[#d8896a] font-bold tracking-widest text-xl">0932852037</span>
-                            </div>
-                            
-                            <button id="copyButton" class="copy-button ml-0 md:ml-2 px-4 py-1.5 text-sm rounded-full bg-[#a1887f] text-white shadow hover:bg-[#8d6e63] flex items-center gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                                </svg>
-                                複製密碼
-                            </button>
-                        </div>
-                        <div id="copyMessage" class="h-6 text-sm text-green-700 font-medium transition-all duration-300 opacity-0 transform translate-y-2">
-                            ✅ 已成功複製！
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Section 4: 額外加購 -->
-            <section>
-                <h3 class="section-title mb-5">額外加購・Additional Fees</h3>
-                <p class="text-[#5d4037] mb-4 text-sm">若有以下需求，請於訂房前提前告知以利準備：</p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- 左卡片 -->
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm relative overflow-hidden group hover:border-[#e0d9c5] transition-colors">
-                        <div class="absolute top-0 right-0 w-16 h-16 bg-[#f7f3e8] rounded-bl-full -mr-8 -mt-8 z-0"></div>
-                        <h4 class="font-bold text-[#6d4c41] mb-3 relative z-10 flex items-center gap-2">
-                            <span class="text-xl">🛎️</span> 預約需求 <span class="text-xs font-normal text-[#a1887f] border border-[#a1887f] rounded px-1">需提前</span>
-                        </h4>
-                        <ul class="text-[#6d4c41] space-y-2 list-none text-sm relative z-10">
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-[#d8896a] rounded-full mr-2"></span>雙床併床服務</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-[#d8896a] rounded-full mr-2"></span>小孩澡盆</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-[#d8896a] rounded-full mr-2"></span>浴室板凳</li>
-                        </ul>
-                    </div>
-                    
-                    <!-- 右卡片 -->
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm relative overflow-hidden hover:border-[#e0d9c5] transition-colors">
-                        <div class="absolute top-0 right-0 w-16 h-16 bg-[#f7f3e8] rounded-bl-full -mr-8 -mt-8 z-0"></div>
-                        <h4 class="font-bold text-[#6d4c41] mb-3 relative z-10 flex items-center gap-2">
-                            <span class="text-xl">💰</span> 加價費用 <span class="text-xs font-normal text-[#a1887f]">NTD</span>
-                        </h4>
-                        <ul class="text-[#6d4c41] space-y-2 list-none text-sm relative z-10">
-                            <li class="flex justify-between border-b border-dashed border-gray-100 pb-1">
-                                <span>加人</span> <span class="font-bold text-[#d8896a]">300 元/人</span>
-                            </li>
-                            <li class="flex justify-between border-b border-dashed border-gray-100 pb-1">
-                                <span>加床</span> <span class="font-bold text-[#d8896a]">500 元/床</span>
-                            </li>
-                            <li class="flex justify-between">
-                                <span>加棉被</span> <span class="font-bold text-[#d8896a]">100 元/條</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Section 5: 地點導航 -->
-            <section>
-                <h3 class="section-title mb-5">地點導航・Location</h3>
-                <div class="text-center p-8 bg-[#fff8e1] rounded-2xl border border-[#f0e0c0] flex flex-col items-center">
-                    <p class="text-[#5d4037] mb-6 max-w-md mx-auto">
-                        建議您在出發前先點擊下方按鈕，開啟 Google 地圖導航並儲存地點，確保旅途順利。
-                    </p>
-                    <a href="https://maps.app.goo.gl/2hACwknx3dkWGyna7?g_st=ipc" target="_blank" class="btn-primary inline-flex items-center justify-center px-8 py-4 rounded-full font-bold shadow-lg shadow-[#d8896a]/30 transition-all duration-300 transform hover:-translate-y-1">
-                        <span class="text-2xl mr-3 animate-bounce">📍</span> 
-                        <span class="text-lg">開啟 Google 地圖導航</span>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Footer: 聯絡我們 (已更新品牌色與移除 QR 字樣) -->
-            <section class="text-center pt-10 border-t-2 border-dashed border-[#e0d9c5] mt-8">
-                <h3 class="text-xl font-bold text-[#6d4c41] mb-6">聯絡與追蹤我們</h3>
-                
-                <div class="flex justify-center gap-8 md:gap-16">
-                    <!-- FB (使用 FB 藍色) -->
-                    <div class="flex flex-col items-center group cursor-pointer">
-                        <a href="https://www.facebook.com/share/1AZPxGJtd7/?mibextid=wwXIfr" target="_blank" class="qr-frame group-hover:border-[#1877F2]">
-                            <div class="qr-placeholder">
-                                <!-- 替換為藍色背景，無 QR 字樣的佔位圖 -->
-                                <img src="https://placehold.co/150x150/1877F2/ffffff?text=FB&font=roboto" alt="循跡文旅臉書粉絲專頁" onerror="this.src='https://placehold.co/150x150/eee/999?text=Image+Error'">
-                            </div>
-                        </a>
-                        <p class="text-sm font-medium text-[#8d6e63] mt-3 group-hover:text-[#1877F2] transition-colors">循跡臉書粉專</p>
-                    </div>
-
-                    <!-- LINE (使用 LINE 綠色) -->
-                    <div class="flex flex-col items-center group cursor-pointer">
-                        <a href="https://lin.ee/tEn5MXD" target="_blank" class="qr-frame group-hover:border-[#06c755]">
-                            <div class="qr-placeholder">
-                                <!-- 替換為綠色背景，無 QR 字樣的佔位圖 -->
-                                <img src="https://placehold.co/150x150/06c755/ffffff?text=LINE&font=roboto" alt="循跡文旅官方 LINE" onerror="this.src='https://placehold.co/150x150/eee/999?text=Image+Error'">
-                            </div>
-                        </a>
-                        <p class="text-sm font-medium text-[#8d6e63] mt-3 group-hover:text-[#06c755] transition-colors">官方 LINE</p>
-                    </div>
-                </div>
-
-                <div class="mt-12 text-xs text-[#bcaaa4]">
-                    &copy; TRACöVER INN 循跡文旅. All Rights Reserved.
-                </div>
-            </section>
+        <div class="scroll-hint">
+            <p class="text-sm mb-1">往下滑動進入</p>
+            <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
         </div>
     </div>
-    
-    <script>
-        document.getElementById('copyButton').addEventListener('click', function() {
-            var passwordText = document.getElementById('wifiPassword').innerText;
-            var copyMessage = document.getElementById('copyMessage');
-            var btn = this;
+
+    <!-- 2. 主要內容卡片 -->
+    <div class="cafe-card">
+        
+        <!-- Header -->
+        <header class="text-center pt-12 pb-8 px-6 bg-[#fffcf5]">
+            <p class="text-xs text-[#a1887f] tracking-[0.2em] uppercase mb-2 font-bold">WEDDING INVITATION</p>
+            <h1 class="text-4xl md:text-5xl font-bold text-[#6d4c41] leading-tight mb-3 tracking-wide">
+                蔡耀文 <span class="text-[#d8896a]">&</span> 王晴萱
+            </h1>
+            <p class="text-sm text-[#8d6e63] mb-4 font-medium tracking-wider">Ayao & Sherry</p>
+            <div class="h-px w-24 bg-[#e0d9c5] mx-auto my-4"></div>
             
-            // 嘗試使用現代 API
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(passwordText).then(onCopySuccess, onCopyFallback);
-            } else {
-                // 回退機制 (Legacy)
-                onCopyFallback(passwordText);
-            }
+            <p class="text-lg font-medium text-[#8d6e63] mb-1">
+                2026年 1月 31日 (六)
+                <span class="block text-sm font-normal text-[#a1887f] mt-1">Jan 31, 2026 (Sat)</span>
+            </p>
+            
+            <p class="text-base text-[#8d6e63] mt-3">
+                屏東東隆堂婚宴會館2樓（東港）
+                <span class="block text-sm text-[#a1887f] mt-1">Donglongtang Banquet Hall (Donggang)</span>
+            </p>
 
-            function onCopyFallback(text) {
-                var textArea = document.createElement("textarea");
-                textArea.value = text || passwordText;
-                textArea.style.position = "fixed";
-                textArea.style.left = "-9999px";
-                textArea.style.top = "0";
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
+            <!-- 倒數計時 -->
+            <div class="flex justify-center gap-3 mt-6 mb-6">
+                <div class="countdown-box"><div class="countdown-number" id="days">00</div><div class="countdown-label">Days</div></div>
+                <div class="countdown-box"><div class="countdown-number" id="hours">00</div><div class="countdown-label">Hrs</div></div>
+                <div class="countdown-box"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">Mins</div></div>
+                <div class="countdown-box"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">Secs</div></div>
+            </div>
+
+            <!-- Google Calendar -->
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=蔡耀文%20%26%20王晴萱%20喜結良緣&dates=20260131T033000Z/20260131T070000Z&details=地點：屏東東隆堂婚宴會館（東港）%0A地址：屏東縣東港鎮沿海路210號%0A入席時間：11:30&location=屏東縣東隆堂婚宴會館" target="_blank" class="btn-primary w-auto px-8">
+                📅 加入行事曆 / Add to Calendar
+            </a>
+        </header>
+
+        <!-- 導航列 -->
+        <nav class="nav-bar">
+            <a href="#invitation">喜帖</a>
+            <a href="#venue">交通</a>
+            <a href="#timeline">時程</a>
+            <a href="#qa_couple">趣聞</a>
+            <a href="#faq">問答</a>
+            <a href="#gallery">相本</a>
+            <a href="#travel">順遊</a>
+        </nav>
+
+        <div class="px-6 pb-12 md:px-12 space-y-10">
+
+            <!-- Section 1: 電子喜帖 -->
+            <section id="invitation">
+                <h3 class="section-title">電子喜帖・Invitation</h3>
+                <div class="space-y-4">
+                    <img src="front.jpg" alt="喜帖正面" class="responsive-img" onerror="this.style.display='none'">
+                    <img src="back.jpg" alt="喜帖背面" class="responsive-img" onerror="this.style.display='none'">
+                </div>
+            </section>
+
+            <!-- Section 3: 會場交通 -->
+            <section id="venue">
+                <h3 class="section-title">會場交通・Location</h3>
                 
-                try {
-                    var successful = document.execCommand('copy');
-                    if(successful) {
-                        onCopySuccess();
-                    } else {
-                        console.error('Fallback: Copying text command was unsuccessful');
+                <div class="bg-[#fff8e1] p-6 rounded-2xl border border-[#f0e0c0] mb-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-[#d8896a] mr-3 mt-1">📍</span>
+                            <div>
+                                <strong>地點 / Venue</strong>
+                                <div class="text-[#4e342e]">屏東東隆堂婚宴會館 (東港店)</div>
+                                <div class="en-text">Donglongtang Banquet Hall (Donggang Branch)</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#d8896a] mr-3 mt-1">🏠</span>
+                            <div>
+                                <strong>地址 / Address</strong>
+                                <div class="text-[#4e342e]">屏東縣東港鎮沿海路210號</div>
+                                <div class="en-text">No. 210, Yanhai Rd., Donggang Township, Pingtung County</div>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#d8896a] mr-3 mt-1">⏰</span>
+                            <div>
+                                <strong>時間 / Time</strong>
+                                <div class="text-[#4e342e]">12:00 迎賓 / 13:00 準時開席</div>
+                                <div class="en-text">12:00 Reception / 13:00 Ceremony Start</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                        <h4 class="font-bold text-[#6d4c41] mb-2 flex items-center gap-2">🚗 自行開車 / Driving</h4>
+                        <p class="text-sm">請行駛 <strong>國道3號 (南州交流道)</strong> 下，左轉往東港方向，沿 187乙縣道 接 沿海路 即可抵達。</p>
+                        <p class="en-text mt-1">Take National Fwy No. 3, exit at Nanzhou Interchange, turn left towards Donggang.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                        <h4 class="font-bold text-[#6d4c41] mb-2 flex items-center gap-2">🅿️ 停車資訊 / Parking</h4>
+                        <p class="text-sm">會館備有專屬停車場。若客滿可停放於周邊沿海路兩側白線。</p>
+                        <p class="en-text mt-1">Free parking lot available at the venue.</p>
+                    </div>
+                </div>
+
+                <a href="https://www.google.com/maps/dir/?api=1&destination=屏東縣東隆堂婚宴會館+東港" target="_blank" class="btn-primary mt-6 flex items-center justify-center gap-2">
+                    <span>📍</span> 一鍵導航至會館 / Navigate
+                </a>
+            </section>
+
+            <!-- Section 4: 當日時程 -->
+            <section id="timeline">
+                <h3 class="section-title">當日時程・Timeline</h3>
+                <div class="space-y-6 pl-2 border-l-2 border-[#e0d9c5] ml-2">
+                    <div class="relative pl-6">
+                        <div class="absolute -left-[9px] top-1.5 w-4 h-4 bg-[#d8896a] rounded-full border-4 border-white shadow-sm"></div>
+                        <span class="font-bold text-[#6d4c41] text-lg">12:00</span>
+                        <div class="ml-2 inline-block align-top">
+                            <div class="font-medium">迎賓・簽到</div>
+                            <div class="en-text">Reception & Sign-in</div>
+                        </div>
+                    </div>
+                    <div class="relative pl-6">
+                        <div class="absolute -left-[9px] top-1.5 w-4 h-4 bg-[#a1887f] rounded-full border-4 border-white shadow-sm"></div>
+                        <span class="font-bold text-[#6d4c41] text-lg">13:00</span>
+                        <div class="ml-2 inline-block align-top">
+                            <div class="font-medium">儀式・開席</div>
+                            <div class="en-text">Ceremony & Banquet</div>
+                        </div>
+                    </div>
+                    <div class="relative pl-6">
+                        <div class="absolute -left-[9px] top-1.5 w-4 h-4 bg-[#a1887f] rounded-full border-4 border-white shadow-sm"></div>
+                        <span class="font-bold text-[#6d4c41] text-lg">15:00</span>
+                        <div class="ml-2 inline-block align-top">
+                            <div class="font-medium">送客・圓滿</div>
+                            <div class="en-text">Farewell</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: 愛情測驗 (更新邏輯) -->
+            <section id="qa_couple">
+                <h3 class="section-title">新人趣聞・Quiz</h3>
+                <p class="mb-4 text-sm">關於耀文與晴萱的小秘密，您知曉多少？</p>
+
+                <!-- Q1 -->
+                <div class="quiz-question" data-question-id="1">
+                    <p class="font-bold text-[#6d4c41] mb-3">1. 我們初次約會的地點是？</p>
+                    <label class="quiz-option"><input type="radio" name="q1" value="A" class="mr-2 accent-[#d8896a]"> A. 中興大學女宿街</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="B" class="mr-2 accent-[#d8896a]"> B. 中興大學中興湖</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="C" class="mr-2 accent-[#d8896a]"> C. 中興大學圖書館</label>
+                    <div class="feedback-message" id="feedback-1"></div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="quiz-question" data-question-id="2">
+                    <p class="font-bold text-[#6d4c41] mb-3">2. 是誰先提出告白的？</p>
+                    <label class="quiz-option"><input type="radio" name="q2" value="A" class="mr-2 accent-[#d8896a]"> A. 耀文 (新郎)</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="B" class="mr-2 accent-[#d8896a]"> B. 開玩笑當然是默契</label>
+                    <label class="quiz-option"><input type="radio" name="q2" value="C" class="mr-2 accent-[#d8896a]"> C. 晴萱 (新娘)</label>
+                    <div class="feedback-message" id="feedback-2"></div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="quiz-question" data-question-id="3">
+                    <p class="font-bold text-[#6d4c41] mb-3">3. 求婚的地點在哪裡？</p>
+                    <label class="quiz-option"><input type="radio" name="q3" value="A" class="mr-2 accent-[#d8896a]"> A. 東港大鵬灣蚵殼島 </label>
+                    <label class="quiz-option"><input type="radio" name="q3" value="B" class="mr-2 accent-[#d8896a]"> B. 日本長野上高地明神池</label>
+                    <label class="quiz-option"><input type="radio" name="q3" value="C" class="mr-2 accent-[#d8896a]"> C. 大雪山國家森林遊樂區</label>
+                    <div class="feedback-message" id="feedback-3"></div>
+                </div>
+            </section>
+
+            <!-- Section 6: 常見問答 -->
+            <section id="faq">
+                <h3 class="section-title">賓客問答・Q&A</h3>
+                
+                <div class="qa-item">
+                    <div class="qa-question">
+                        <span>🕘 建議幾點抵達呢？ <br><span class="text-xs font-normal text-[#8d6e63]">Arrival Time</span></span>
+                        <span class="text-xl text-[#d8896a]">+</span>
+                    </div>
+                    <div class="qa-answer">
+                        歡迎大家於 <strong>12:00</strong> 左右提前抵達，我們現場準備了迎賓小點心，讓大家在開桌前可以先填填肚子、聊聊天。
+                        <div class="en-text mt-2 border-t border-dashed border-[#e0d9c5] pt-2">Please arrive around 12:00. Welcome snacks will be served.</div>
+                    </div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="qa-question">
+                        <span>👔 當天服裝有什麼建議嗎？ <br><span class="text-xs font-normal text-[#8d6e63]">Dress Code</span></span>
+                        <span class="text-xl text-[#d8896a]">+</span>
+                    </div>
+                    <div class="qa-answer">
+                        我們的場佈以<strong>「秋冬大地色調」</strong>為主，歡迎大家搭配同色系穿搭！建議穿著舒適為主 (Semi-Formal)。
+                        <div class="en-text mt-2 border-t border-dashed border-[#e0d9c5] pt-2">Semi-formal. Earth tones are welcome to match our theme.</div>
+                    </div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="qa-question">
+                        <span>👶 會有兒童座椅或餐具嗎？ <br><span class="text-xs font-normal text-[#8d6e63]">For Kids</span></span>
+                        <span class="text-xl text-[#d8896a]">+</span>
+                    </div>
+                    <div class="qa-answer">
+                        有的！我們有為小賓客準備兒童座椅與餐具，當天將由現場服務人員協助安排。
+                        <div class="en-text mt-2 border-t border-dashed border-[#e0d9c5] pt-2">Yes, high chairs and tableware for kids are available.</div>
+                    </div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="qa-question">
+                        <span>🥬 如果有素食或過敏需求怎麼辦？ <br><span class="text-xs font-normal text-[#8d6e63]">Vegetarian / Allergy</span></span>
+                        <span class="text-xl text-[#d8896a]">+</span>
+                    </div>
+                    <div class="qa-answer">
+                        若您有全素或食物過敏需求尚未在問券中填寫，請務必於 <strong>1月15日前</strong> 聯絡我們，以便請廚師特別準備。
+                        <div class="en-text mt-2 border-t border-dashed border-[#e0d9c5] pt-2">Please contact us by Jan 15th for any special dietary requirements.</div>
+                    </div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="qa-question">
+                        <span>⏰ 喜宴預計幾點結束呢？ <br><span class="text-xs font-normal text-[#8d6e63]">End Time</span></span>
+                        <span class="text-xl text-[#d8896a]">+</span>
+                    </div>
+                    <div class="qa-answer">
+                        午宴預計於 <strong>14:30 ~ 15:00</strong> 左右送客結束，建議外縣市親友安排 <strong>15:30 以後</strong> 的回程車次會比較充裕喔！
+                        <div class="en-text mt-2 border-t border-dashed border-[#e0d9c5] pt-2">The banquet will end around 15:00. We suggest booking return trips after 15:30.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 7: 婚紗相本 -->
+            <section id="gallery">
+                <h3 class="section-title">婚紗相本・Gallery</h3>
+                <div class="gallery-container">
+                    <div class="gallery-item"><img src="photo1.jpg" alt="婚紗照1" onerror="this.style.display='none'"></div>
+                    <div class="gallery-item"><img src="photo2.jpg" alt="婚紗照2" onerror="this.style.display='none'"></div>
+                    <div class="gallery-item"><img src="photo3.jpg" alt="婚紗照3" onerror="this.style.display='none'"></div>
+                    <div class="gallery-item"><img src="photo4.jpg" alt="婚紗照4" onerror="this.style.display='none'"></div>
+                </div>
+                <p class="text-center text-xs text-[#a1887f] mt-2">← 左右滑動查看更多 →</p>
+            </section>
+
+            <!-- Section 8: 順遊推薦 -->
+            <section id="travel">
+                <h3 class="section-title">東港順遊・Local Guide</h3>
+                <p class="mb-6 text-sm text-[#5d4037]">難得來一趟東港，喜宴結束後不妨去這些地方走走！</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- 華僑市場 -->
+                    <div class="travel-card">
+                        <h4 class="font-bold text-[#6d4c41] mb-2 flex items-center gap-2">🐟 華僑市場 <span class="text-xs font-normal text-[#a1887f] mt-1 ml-auto">Huaqiao Market</span></h4>
+                        <p class="text-sm flex-grow mb-3 text-[#5d4037]">就在附近！東港漁港直銷中心。不可錯過的新鮮生魚片、旗魚黑輪，還有伴手禮雙糕潤。</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=東港華僑市場" target="_blank" class="text-sm text-[#d8896a] font-bold hover:underline">📍 地圖導航 / Map</a>
+                    </div>
+                    <!-- 大鵬灣 -->
+                    <div class="travel-card">
+                        <h4 class="font-bold text-[#6d4c41] mb-2 flex items-center gap-2">🌊 大鵬灣風景區 <span class="text-xs font-normal text-[#a1887f] mt-1 ml-auto">Dapeng Bay</span></h4>
+                        <p class="text-sm flex-grow mb-3 text-[#5d4037]">適合散步吹風，著名的跨海大橋開橋秀與絕美夕陽，還有海上教堂咖啡。</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=大鵬灣國家風景區" target="_blank" class="text-sm text-[#d8896a] font-bold hover:underline">📍 地圖導航 / Map</a>
+                    </div>
+                    <!-- 東隆宮 -->
+                    <div class="travel-card">
+                        <h4 class="font-bold text-[#6d4c41] mb-2 flex items-center gap-2">⛩️ 東隆宮 <span class="text-xs font-normal text-[#a1887f] mt-1 ml-auto">Donglong Temple</span></h4>
+                        <p class="text-sm flex-grow mb-3 text-[#5d4037]">金碧輝煌的黃金牌樓，在地信仰中心，體驗獨特的「責杖改運」祈求平安。</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=東港東隆宮" target="_blank" class="text-sm text-[#d8896a] font-bold hover:underline">📍 地圖導航 / Map</a>
+                    </div>
+                    <!-- 林後四林 -->
+                    <div class="travel-card">
+                        <h4 class="font-bold text-[#6d4c41] mb-2 flex items-center gap-2">🌲 林後四林 <span class="text-xs font-normal text-[#a1887f] mt-1 ml-auto">Linhousilin Park</span></h4>
+                        <p class="text-sm flex-grow mb-3 text-[#5d4037]">位於潮州，佔地廣闊的平地森林園區。擁有美麗的綠色隧道與二峰圳，非常適合散步踩水。</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=林後四林平地森林園區" target="_blank" class="text-sm text-[#d8896a] font-bold hover:underline">📍 地圖導航 / Map</a>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-8 bg-[#f9f7f2] border-t border-[#e0d9c5]">
+            <p class="text-[#6d4c41] font-bold mb-2">耀文 & 晴萱 敬邀</p>
+            <p class="text-sm text-[#a1887f]">期待與您相見</p>
+            <a href="#top" class="inline-block mt-4 text-xs text-[#d8896a] border-b border-[#d8896a]">↟ 返回頂部 / Top</a>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 倒數計時
+            const weddingDate = new Date('2026-01-31T11:30:00').getTime();
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = weddingDate - now;
+                if (distance < 0) return;
+                document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+                document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
+            }, 1000);
+
+            // Q&A 展開
+            document.querySelectorAll('.qa-question').forEach(item => {
+                item.addEventListener('click', () => {
+                    const answer = item.nextElementSibling;
+                    const isOpen = answer.style.display === 'block';
+                    document.querySelectorAll('.qa-answer').forEach(a => a.style.display = 'none');
+                    document.querySelectorAll('.qa-question span:last-child').forEach(s => s.innerText = '+');
+                    if (!isOpen) {
+                        answer.style.display = 'block';
+                        item.querySelector('span:last-child').innerText = '-';
                     }
-                } catch (err) {
-                    console.error('Fallback: Oops, unable to copy', err);
-                }
-                document.body.removeChild(textArea);
-            }
+                });
+            });
 
-            function onCopySuccess() {
-                copyMessage.classList.remove('opacity-0', 'translate-y-2');
-                copyMessage.classList.add('opacity-100', 'translate-y-0');
-                
-                var originalBg = btn.className;
-                btn.classList.remove('bg-[#a1887f]', 'hover:bg-[#8d6e63]');
-                btn.classList.add('bg-green-600', 'hover:bg-green-700');
-                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> 已複製';
-
-                setTimeout(function() {
-                    copyMessage.classList.add('opacity-0', 'translate-y-2');
-                    copyMessage.classList.remove('opacity-100', 'translate-y-0');
-                    
-                    btn.className = "copy-button ml-0 md:ml-2 px-4 py-1.5 text-sm rounded-full bg-[#a1887f] text-white shadow hover:bg-[#8d6e63] flex items-center gap-1";
-                    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg> 複製密碼';
-                }, 3000);
-            }
+            // 測驗邏輯 (更新正確答案與回饋文字)
+            const answers = { '1': 'C', '2': 'B', '3': 'B' }; 
+            
+            document.querySelectorAll('.quiz-question').forEach(q => {
+                q.querySelectorAll('input').forEach(input => {
+                    input.addEventListener('change', (e) => {
+                        const qId = q.getAttribute('data-question-id');
+                        const isCorrect = e.target.value === answers[qId];
+                        const fb = document.getElementById(`feedback-${qId}`);
+                        fb.style.display = 'block';
+                        fb.className = `feedback-message ${isCorrect ? 'feedback-correct' : 'feedback-incorrect'}`;
+                        
+                        // 客製化回饋文字
+                        let message = '';
+                        if (isCorrect) {
+                            if (qId === '1') {
+                                message = '✦ 沒錯，我們就這樣尬了1個多小時。';
+                            } else if (qId === '3') {
+                                message = '✦ 因此每年都要回去上高地進香（在那邊藉口）';
+                            } else {
+                                message = '✦ 以～';
+                            }
+                        } else {
+                            message = '✦ 答錯了，恭喜你加入當天擋酒部隊！';
+                        }
+                        
+                        fb.innerText = message;
+                        q.querySelectorAll('input').forEach(i => i.disabled = true);
+                    });
+                });
+            });
         });
     </script>
-
 </body>
 </html>
-
